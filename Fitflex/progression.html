@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Progression - FitFlex</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🔔 FitFlex Daily Schedule</h1>
+    <p class="subtitle">Customize your daily health reminders</p>
+
+    <!-- Toggle Notifications -->
+    <label class="toggle">
+      <input type="checkbox" id="notifyToggle"> Enable Notifications
+    </label>
+
+    <!-- Editable Schedule Table -->
+    <form id="scheduleForm">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Task</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody">
+          <!-- Filled dynamically -->
+        </tbody>
+      </table>
+      <div class="controls">
+        <button type="button" id="saveBtn">💾 Save</button>
+        <button type="button" id="previewBtn">🔔 Preview</button>
+        <button type="button" id="resetBtn">🔄 Reset</button>
+      </div>
+    </form>
+
+    <!-- Bottom Nav Buttons -->
+    <p class="subtitle">
+      <a class="btn" href="workouts.html">Workouts</a>
+      <a class="btn" href="diet.html">Diet Plans</a>
+      <a class="btn" href="settings.html">Settings</a>
+    </p>
+  </div>
+
+  <script>
+    const defaultSchedule = [
+      { time: "06:30", task: "Drink Water 💧" },
+      { time: "07:00", task: "Jogging 🏃" },
+      { time: "08:00", task: "Eat Breakfast 🍳" },
+      { time: "09:00", task: "Yoga 🧘" },
+      { time: "12:30", task: "Eat Lunch 🍛" },
+      { time: "17:00", task: "Workout 💪" },
+      { time: "19:00", task: "Drink Water 💧" },
+      { time: "20:00", task: "Eat Dinner 🍲" }
+    ];
+
+    const scheduleKey = "fitflex_schedule";
+    const notifyKey = "fitflex_notify";
+    const sentToday = new Set();
+
+    const scheduleBody = document.getElementById("scheduleBody");
+    const notifyToggle = document.getElementById("notifyToggle");
+
+    // Load saved schedule or defaults
+    let schedule = JSON.parse(localStorage.getItem(scheduleKey)) || defaultSchedule;
+
+    function renderScheduleEditor() {
+      scheduleBody.innerHTML = "";
+      schedule.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><input type="time" value="${item.time}" data-index="${index}" class="time-input"></td>
+          <td><input type="text" value="${item.task}" data-index="${index}" class="task-input"></td>
+        `;
+        scheduleBody.appendChild(row);
+      });
+    }
+
+    function saveSchedule() {
+      const newSchedule = [];
+      document.querySelectorAll(".time-input").forEach((input, i) => {
+        const time = input.value;
+        const task = document.querySelectorAll(".task-input")[i].value;
+        newSchedule.push({ time, task });
+      });
+      localStorage.setItem(scheduleKey, JSON.stringify(newSchedule));
+      schedule = newSchedule;
+      alert("✅ Schedule saved!");
+    }
+
+    function previewNotification() {
+      if (Notification.permission === "granted") {
+        new Notification("FitFlex Reminder", {
+          body: "This is how your reminders will look! 🔔"
+        });
+      } else {
+        Notification.requestPermission().then(p => {
+          if (p === "granted") previewNotification();
+        });
+      }
+    }
+
+    function resetSchedule() {
+      if (confirm("Reset to default schedule?")) {
+        localStorage.removeItem(scheduleKey);
+        schedule = defaultSchedule;
+        renderScheduleEditor();
+      }
+    }
+
+    // Notification Logic
+    notifyToggle.checked = localStorage.getItem(notifyKey) === "true";
+    notifyToggle.addEventListener("change", () => {
+      const enabled = notifyToggle.checked;
+      localStorage.setItem(notifyKey, enabled);
+      if (enabled) {
+        Notification.requestPermission();
+      }
+    });
+
+    function sendReminder(task) {
+      if (Notification.permission === "granted") {
+        new Notification("FitFlex Reminder", { body: task });
+      }
+    }
+
+    setInterval(() => {
+      if (!notifyToggle.checked) return;
+      const now = new Date();
+      const current = now.toTimeString().slice(0, 5); // HH:MM
+      schedule.forEach(item => {
+        if (item.time === current && !sentToday.has(item.time)) {
+          sendReminder(item.task);
+          sentToday.add(item.time);
+        }
+      });
+    }, 30000); // every 30 seconds
+
+    // Bind buttons
+    document.getElementById("saveBtn").addEventListener("click", saveSchedule);
+    document.getElementById("previewBtn").addEventListener("click", previewNotification);
+    document.getElementById("resetBtn").addEventListener("click", resetSchedule);
+
+    // On load
+    renderScheduleEditor();
+  </script>
+</body>
+</html>

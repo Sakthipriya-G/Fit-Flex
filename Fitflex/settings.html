@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings - FitFlex</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>⚙️ Settings</h1>
+    <p class="subtitle">Manage your profile and data</p>
+
+    <form class="settings-form">
+      <label for="name">Display Name</label>
+      <input type="text" id="name" placeholder="Your name">
+
+      <label for="phone">Phone (read-only)</label>
+      <input type="text" id="phone" disabled>
+
+      <div class="hint">Phone comes from registration and cannot be changed.</div>
+
+      <div class="buttons">
+        <button type="button" class="reset-btn" id="reset">Reset Account</button>
+        <button type="button" class="delete-btn" id="delete">Delete Account</button>
+      </div>
+    </form>
+
+    <p class="subtitle">
+      <a class="btn" href="workouts.html">Workouts</a>
+      <a class="btn" href="diet.html">Diet Plans</a>
+      <a class="btn" href="progression.html">Progression</a>
+    </p>
+  </div>
+
+  <script>
+    // Load user
+    const user = JSON.parse(localStorage.getItem("fitflex_user") || "{}");
+    document.getElementById("name").value = user.name || "";
+    document.getElementById("phone").value = user.phone || "";
+
+    // Save name changes live
+    document.getElementById("name").addEventListener("input", (e) => {
+      const u = JSON.parse(localStorage.getItem("fitflex_user") || "{}");
+      u.name = e.target.value;
+      localStorage.setItem("fitflex_user", JSON.stringify(u));
+    });
+
+    // Reset: clears only progression (example keys)
+    document.getElementById("reset").addEventListener("click", () => {
+      localStorage.removeItem("fitflex_progression");
+      alert("Account reset: progression cleared.");
+    });
+
+    // Delete: clears all and returns to registration
+    document.getElementById("delete").addEventListener("click", () => {
+      localStorage.clear();
+      alert("Account deleted. Please register again.");
+      window.location.href = "registration.html";
+    });
+  </script>
+</body>
+</html>

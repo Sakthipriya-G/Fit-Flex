@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Registration - FitFlex</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Registration Form</h1>
+
+    <form id="reg-form" autocomplete="off">
+      <!-- Username -->
+      <label for="uname">User Name:</label>
+      <input type="text" id="uname" name="uname" required>
+
+      <!-- Mobile -->
+      <label for="mobilenum">Mobile Number:</label>
+      <input type="text" id="mobilenum" name="mobilenum" placeholder="+91XXXXXXXXXX" required>
+
+      <!-- OTP -->
+      <label for="otp">Enter OTP:</label>
+      <input type="number" id="otp" name="otp" inputmode="numeric">
+      <p id="otp-status"></p>
+      <button type="button" id="send-otp">Generate OTP</button>
+      <button type="button" id="verify-otp">Verify OTP</button>
+
+      <!-- Gender -->
+      <div class="gender">
+        <label>Gender:</label>
+        <input type="radio" name="gender" value="M"> Male
+        <input type="radio" name="gender" value="F"> Female
+      </div>
+
+      <h2>Personal Information</h2>
+
+      <!-- Weight -->
+      <label for="weight">Weight (kg):</label>
+      <input type="number" id="weight" placeholder="Enter weight in kg">
+
+      <!-- Height -->
+      <label for="height">Height (cm):</label>
+      <input type="number" id="height" placeholder="Enter height in cm">
+
+      <button type="button" id="calculateBtn">Calculate BMI</button>
+      <p id="result"></p>
+
+      <div class="buttons">
+        <input type="reset" value="Reset">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+
+    <p class="subtitle">Already registered? Go to:
+      <a class="btn" href="workouts.html">Workouts</a>
+      <a class="btn" href="diet.html">Diet</a>
+      <a class="btn" href="progression.html">Progression</a>
+      <a class="btn" href="settings.html">Settings</a>
+    </p>
+  </div>
+
+  <script>
+    // Send OTP (same-origin)
+    document.getElementById("send-otp").addEventListener("click", async () => {
+      const phone = document.getElementById("mobilenum").value.trim();
+      if (!phone) return alert("Please enter your mobile number");
+
+      try {
+        const res = await fetch("/api/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone })
+        });
+        const data = await res.json();
+        document.getElementById("otp-status").textContent = data.message || "OTP sent!";
+        // Helpful in demo mode:
+        if (data.demoOtp) {
+          document.getElementById("otp-status").textContent += ` (Demo OTP: ${data.demoOtp})`;
+        }
+      } catch (e) {
+        document.getElementById("otp-status").textContent = "Server error sending OTP";
+      }
+    });
+
+    // Verify OTP
+    document.getElementById("verify-otp").addEventListener("click", async () => {
+      const phone = document.getElementById("mobilenum").value.trim();
+      const otp = document.getElementById("otp").value.trim();
+      if (!phone || !otp) return alert("Enter phone and OTP");
+
+      try {
+        const res = await fetch("/api/verify-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone, otp })
+        });
+        const data = await res.json();
+        document.getElementById("otp-status").textContent = data.message;
+      } catch (e) {
+        document.getElementById("otp-status").textContent = "Server error verifying OTP";
+      }
+    });
+
+    // BMI Calculator
+    document.getElementById("calculateBtn").addEventListener("click", function() {
+      const weight = parseFloat(document.getElementById("weight").value);
+      const height = parseFloat(document.getElementById("height").value) / 100;
+      const resultEl = document.getElementById("result");
+      if (weight > 0 && height > 0) {
+        const bmi = (weight / (height * height)).toFixed(2);
+        resultEl.textContent = "Your BMI is: " + bmi;
+      } else {
+        resultEl.textContent = "Please enter valid weight and height!";
+      }
+    });
+
+    // Handle submit (after OTP verification you can redirect)
+    document.getElementById("reg-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      // Optional: check otp-status contains "verified"
+      const status = document.getElementById("otp-status").textContent.toLowerCase();
+      if (!status.includes("verified")) {
+        alert("Please verify OTP before submitting.");
+        return;
+      }
+      // Save minimal user info and go to menu (workouts)
+      localStorage.setItem("fitflex_user", JSON.stringify({
+        name: document.getElementById("uname").value,
+        phone: document.getElementById("mobilenum").value,
+        gender: (document.querySelector('input[name="gender"]:checked') || {}).value || "",
+        weight: document.getElementById("weight").value,
+        height: document.getElementById("height").value
+      }));
+      window.location.href = "workouts.html";
+    });
+  </script>
+</body>
+</html>

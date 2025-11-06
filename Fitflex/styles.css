@@ -1,0 +1,290 @@
+/* ================= REGISTRATION PAGE ================= */
+.registration-page body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .registration-page .container {
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    width: 400px;
+  }
+  
+  .registration-page h1,
+  .registration-page h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .registration-page label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+  
+  .registration-page input[type="text"],
+  .registration-page input[type="number"],
+  .registration-page input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border 0.3s;
+  }
+  
+  .registration-page input:focus {
+    border-color: #4facfe;
+  }
+  
+  .registration-page .gender {
+    margin-bottom: 15px;
+  }
+  
+  .registration-page .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .registration-page input[type="submit"],
+  .registration-page input[type="reset"],
+  .registration-page button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+  }
+  
+  .registration-page input[type="submit"] {
+    background: #4facfe;
+    color: #fff;
+  }
+  
+  .registration-page input[type="reset"] {
+    background: #ccc;
+    color: #333;
+  }
+  
+  .registration-page button {
+    background: #00c9a7;
+    color: #fff;
+  }
+  
+  .registration-page input[type="submit"]:hover {
+    background: #357ae8;
+  }
+  
+  .registration-page input[type="reset"]:hover {
+    background: #999;
+  }
+  
+  .registration-page button:hover {
+    background: #00997b;
+  }
+  
+  #otp-display {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* ================= MAIN APP STYLES ================= */
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #232526, #414345);
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1000px;
+    padding: 30px;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #00f2fe, #4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: #00f2fe; /* fallback */
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #ccc;
+  }
+  
+  /* ===== Form ===== */
+  form {
+    text-align: left;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  }
+  
+  label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  
+  .gender {
+    margin: 10px 0 20px;
+  }
+  .gender input {
+    margin-left: 10px;
+  }
+  
+  /* Buttons */
+  button,
+  input[type="submit"],
+  input[type="reset"],
+  a.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 6px 4px;
+    background: #00f2fe;
+    color: #000;
+    transition: transform .2s, background .3s;
+  }
+  button:hover,
+  input[type="submit"]:hover,
+  input[type="reset"]:hover,
+  a.btn:hover {
+    transform: translateY(-2px);
+    background: #4facfe;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  /* ===== Cards / Options ===== */
+  .options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  
+  .card,
+  .workout-card,
+  .day {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s, background 0.3s;
+  }
+  .card:hover,
+  .workout-card:hover,
+  .day:hover {
+    transform: translateY(-6px);
+    background: rgba(255,255,255,0.15);
+  }
+  
+  .card h2,
+  .workout-card h2 {
+    font-size: 1.6rem;
+    margin: 0 0 8px;
+    color: #00f2fe;
+  }
+  .card p,
+  .workout-card p {
+    color: #ddd;
+  }
+  
+  /* ===== Video Wrapper (Responsive) ===== */
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    margin-top: 10px;
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 12px;
+  }
+  
+  /* ===== Calendar ===== */
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+  }
+  .day h3 {
+    margin: 0 0 8px;
+    color: #ffe259;
+  }
+  .day p {
+    margin: 4px 0;
+    color: #eee;
+  }
+  
+  /* ===== Settings ===== */
+  .settings-form {
+    text-align: left;
+  }
+  .settings-form .hint {
+    color: #bbb;
+    font-size: 0.9rem;
+  }
+  
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    .container {
+      padding: 20px;
+    }
+  }
+  
